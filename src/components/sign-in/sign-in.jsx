@@ -4,23 +4,27 @@ import './sign-in.scss';
 import CustomButton from '../../components/custom-button/custom-button';
 import {signInWithGoogle} from '../../firebase/firebase.utils.js';
 
-const SignIn = () => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+const SignIn = ({emailSignInStart, googleSignInStart}) => {
+    const [userCredentials, setCredentials] = useState({email: '', password: ''});
 
     const signIn = e => {
         e.preventDefault();
 
-        setEmail('');
-        setPassword('');
+        setCredentials('');
     }
 
-    const handleSubmit = e => {
+    const {email, password} = userCredentials;
+
+    const handleSubmit = async e => {
         e.preventDefault();
-        console.log(email,password)
+
     }
 
-    
+    const handleChange = e => {
+        const {value, name} = e.target;
+
+        setCredentials({...userCredentials,[name]: value});
+    }
 
     return (
         <div className='login'>
@@ -33,14 +37,14 @@ const SignIn = () => {
                 <input 
                     type='email' 
                     value={email} 
-                    onChange={(e)=>setEmail(e.target.value)}
+                    handleChange={handleChange}
                 />
 
                 <h5>Password</h5>
                 <input 
                     type='password'
                     value={password}
-                    onChange={(e)=>setPassword(e.target.value)}
+                    handleChange={handleChange}
                 />
 
                 <CustomButton
@@ -53,6 +57,7 @@ const SignIn = () => {
                 see our Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice.</p>
 
                 <CustomButton
+                    type='button'
                     onClick={signInWithGoogle}
                     isGoogleSignIn>
                     Sign In With Google
